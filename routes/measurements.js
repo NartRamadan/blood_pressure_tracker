@@ -10,6 +10,16 @@ function average(arr) {
     return sum / arr.length;
 }
 
+router.get('/', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM measurements');
+        res.json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving measurements');
+    }
+});
+
 // GET /measurements/report - דוח חודשי לכל המשתמשים
 router.get('/report', async (req, res) => {
     try {
@@ -105,5 +115,40 @@ router.get('/report', async (req, res) => {
         res.status(500).send('Error generating monthly report');
     }
 });
+
+// GET /measurements/add
+router.get('/add', async (req, res) => {
+    try {
+        // שליפת משתמשים עבור הדרופדאון
+        const [users] = await db.query('SELECT id, name FROM users');
+        // מציגים את התבנית measurements_add.ejs
+        res.render('measurements_add', { users });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading measurement form');
+    }
+});
+
+// GET /measurements/history
+router.get('/history', async (req, res) => {
+    try {
+        // טוען משתמשים (לדרופדאון)
+        const [users] = await db.query('SELECT id, name FROM users');
+
+        // אם אין פרמטרים, מציג רק את הטופס
+        const { user_id, start_date, end_date } = req.query;
+        if (!user_id || !start_date || !end_date) {
+            return res.render('measurements_history', { users, measurements: null });
+        }
+
+        // אם כן יש פרמטרים, מבצעים שאילתה ומשתמשים ב-measurements_history.ejs
+        // ...
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error loading measurement history');
+    }
+});
+
+
 
 module.exports = router;

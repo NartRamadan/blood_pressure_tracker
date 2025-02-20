@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Measurements History</title>
+</head>
+<body>
+<h1>Measurements History</h1>
+
+<!-- דוגמה לטופס לבחירת משתמש ותאריכים -->
+<form action="/measurements/history" method="GET">
+    <label for="user_id">Select User:</label>
+    <select name="user_id" id="user_id">
+        <% if (users) { %>
+            <% users.forEach(user => { %>
+                <option value="<%= user.id %>"><%= user.name %></option>
+            <% }) %>
+        <% } %>
+    </select>
+
+    <br><br>
+
+    <label for="start_date">Start Date:</label>
+    <input type="date" name="start_date" id="start_date">
+
+    <label for="end_date">End Date:</label>
+    <input type="date" name="end_date" id="end_date">
+
+    <button type="submit">Show History</button>
+</form>
+
+<!-- אם כבר בוצעה שאילתה והתקבלו נתונים, מציגים טבלה -->
+<% if (measurements) { %>
+    <h2>Results:</h2>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Low Value</th>
+            <th>High Value</th>
+            <th>Pulse</th>
+        </tr>
+        <% measurements.forEach(m => { %>
+            <tr>
+                <td><%= m.measurement_date %></td>
+                <td><%= m.low_value %></td>
+                <td><%= m.high_value %></td>
+                <td><%= m.pulse %></td>
+            </tr>
+        <% }) %>
+    </table>
+<% } %>
+</body>
+</html>

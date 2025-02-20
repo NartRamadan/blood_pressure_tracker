@@ -1,3 +1,12 @@
+// npm install express body-parser ejs mysql2
+
+//http://localhost:3000/
+//http://localhost:3000/users
+//http://localhost:3000/measurements
+//http://localhost:3000/measurements/add
+//http://localhost:3000/measurements/history
+//http://localhost:3000/measurements/report
+
 // index.js
 const express = require('express');
 const bodyParser = require('body-parser');
