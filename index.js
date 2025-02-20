@@ -1,23 +1,26 @@
-//npm install express body-parser ejs mysql2
-
+// index.js
 const express = require('express');
 const bodyParser = require('body-parser');
+const db = require('./db');
+const usersRouter = require('./routes/users');
+const measurementsRouter = require('./routes/measurements');
 
 const app = express();
 
-// הגדרת שימוש ב־body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// הגדרת מנוע התבניות (EJS)
 app.set('view engine', 'ejs');
 
-// דוגמה לנתיב ראשוני
+// ראוט בסיסי
 app.get('/', (req, res) => {
-    res.send('ברוך הבא לשרת מעקב לחץ דם!');
+    res.send('Hello from Blood Pressure Tracker!');
 });
 
-// הפעלת השרת על פורט 3000
+// שימוש בראוטרים
+app.use('/users', usersRouter);
+app.use('/measurements', measurementsRouter);
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
