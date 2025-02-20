@@ -1,0 +1,45 @@
+<!-- views/measurements_report.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Monthly Report</title>
+</head>
+<body>
+<h1>Monthly Report</h1>
+
+<!-- טופס לבחירת שנה וחודש -->
+<form action="/measurements/report" method="GET">
+    <label for="year">Year:</label>
+    <input type="number" name="year" id="year" placeholder="2025" required>
+
+    <label for="month">Month:</label>
+    <input type="number" name="month" id="month" placeholder="1..12" required>
+
+    <button type="submit">Show Report</button>
+</form>
+
+<!-- אם יש נתונים לחודש/שנה שנבחרו, נציג טבלה -->
+<% if (reportData) { %>
+    <h2>Results for <%= chosenYear %>-<%= chosenMonth %></h2>
+    <table border="1">
+        <tr>
+            <th>User</th>
+            <th>Avg Low</th>
+            <th>Avg High</th>
+            <th>Avg Pulse</th>
+            <th>Outliers Count</th>
+        </tr>
+        <% reportData.forEach(user => { %>
+            <tr>
+                <td><%= user.userName %></td>
+                <td><%= user.avgLow.toFixed(2) %></td>
+                <td><%= user.avgHigh.toFixed(2) %></td>
+                <td><%= user.avgPulse.toFixed(2) %></td>
+                <td><%= user.outliersCount %></td>
+            </tr>
+        <% }) %>
+    </table>
+<% } %>
+</body>
+</html>
