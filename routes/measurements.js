@@ -3,18 +3,20 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-// GET /measurements - החזרת כל המדידות
-router.get('/', async (req, res) => {
+// GET /measurements/add - טופס EJS להוספת מדידה
+router.get('/add', async (req, res) => {
     try {
-        const [rows] = await db.query('SELECT * FROM measurements');
-        res.json(rows);
+        // נשלוף את המשתמשים כדי להציג בדרופדאון
+        const [users] = await db.query('SELECT id, name FROM users');
+        // נרנדר את התבנית עם רשימת המשתמשים
+        res.render('measurements_add', { users });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Error retrieving measurements');
+        res.status(500).send('Error loading measurement form');
     }
 });
 
-// POST /measurements/add - הוספת מדידה חדשה
+// POST /measurements/add - שמירת מדידה חדשה במסד
 router.post('/add', async (req, res) => {
     try {
         const { user_id, measurement_date, low_value, high_value, pulse } = req.body;
@@ -31,6 +33,17 @@ router.post('/add', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send('Error adding measurement');
+    }
+});
+
+// GET /measurements - להחזיר את כל המדידות (כ־JSON, בינתיים)
+router.get('/', async (req, res) => {
+    try {
+        const [rows] = await db.query('SELECT * FROM measurements');
+        res.json(rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving measurements');
     }
 });
 
